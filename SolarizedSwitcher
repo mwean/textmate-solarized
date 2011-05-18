@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+# UUID and filename for light and dark versions of theme
+dark = {:id => "A4299D9B-1DE5-4BC4-87F6-A757E71B1597", :name => "Solarized (dark).tmTheme"}
+light = {:id => "38E819D9-AE02-452F-9231-ECC3B204AFD7", :name => "Solarized (light).tmTheme"}
+
+# Gets current theme id from TextMate plist file
+current_id = `defaults read com.macromates.textmate OakThemeManagerSelectedTheme`.chomp
+
+if current_id == light[:id]
+  switch = dark
+else
+  switch = light
+end
+
+# cd's to TextMate themes directory
+Dir.chdir(File.expand_path("~/Library/Application Support/TextMate/Themes/"))
+
+`open #{switch[:name].dump}`
+
+# Manually update plist file (otherwise it won't reliably switch back)
+`defaults write com.macromates.textmate OakThemeManagerSelectedTheme #{switch[:id]}`
