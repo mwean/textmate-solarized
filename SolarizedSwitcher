@@ -13,10 +13,13 @@ else
   switch = light
 end
 
-# cd's to TextMate themes directory
-Dir.chdir(File.expand_path("~/Library/Application Support/TextMate/Themes/"))
+tm_running = `ps -A | grep TextMate | grep -vc grep`.chomp.to_i
 
-`open #{switch[:name].dump}`
+if tm_running > 0
+  # cd's to TextMate themes directory
+  Dir.chdir(File.expand_path("~/Library/Application Support/TextMate/Themes/"))
 
+  `open #{switch[:name].dump}`
+end
 # Manually update plist file (otherwise it won't reliably switch back)
 `defaults write com.macromates.textmate OakThemeManagerSelectedTheme #{switch[:id]}`
